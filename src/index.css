@@ -4,37 +4,54 @@
 
 @layer base {
   :root {
-    /* Xpander AI Brand Colors */
-    --background: 220 13% 5%; /* #0C0B0D */
-    --foreground: 0 0% 100%; /* #FFFFFF */
-    --card: 220 13% 8%; /* #141215 */
-    --card-foreground: 0 0% 100%;
+    /* Xpander AI 正确的品牌色彩 */
+    --background: 220 13% 5%; /* 深黑背景 #0A0A0B */
+    --foreground: 0 0% 98%; /* 纯白文字 */
+    --card: 220 13% 8%; /* 卡片背景 */
+    --card-foreground: 0 0% 98%;
     --popover: 220 13% 8%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 149 100% 63%; /* #48FFBB - Main brand green */
+    --popover-foreground: 0 0% 98%;
+    
+    /* 主品牌色 - 鲜绿色 */
+    --primary: 158 100% 65%; /* #00FF8A - Xpander AI 主绿色 */
     --primary-foreground: 220 13% 5%;
-    --secondary: 258 89% 59%; /* #753CFF - Brand purple */
-    --secondary-foreground: 0 0% 100%;
-    --muted: 215 15% 15%;
-    --muted-foreground: 0 0% 60%;
-    --accent: 149 100% 63%;
+    
+    /* 辅助色 - 紫色渐变 */
+    --secondary: 258 89% 65%; /* #7B3DFF - 亮紫色 */
+    --secondary-foreground: 0 0% 98%;
+    
+    /* 中性色调 */
+    --muted: 215 15% 12%; /* 深灰 */
+    --muted-foreground: 0 0% 65%; /* 中性文字 */
+    --accent: 158 100% 65%; /* 强调色用主绿 */
     --accent-foreground: 220 13% 5%;
+    
+    /* 状态色 */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 215 15% 15%;
-    --input: 215 15% 15%;
-    --ring: 149 100% 63%;
-    --radius: 0.5rem;
+    --border: 215 15% 15%; /* 边框色 */
+    --input: 215 15% 12%;
+    --ring: 158 100% 65%; /* 聚焦环用主绿 */
+    --radius: 0.75rem;
 
-    /* Custom properties for gradients */
-    --gradient-primary: linear-gradient(152deg, #141215 8.59%, #000 82.67%);
-    --gradient-border: linear-gradient(200deg, #3DCF99 0%, #B4FFE3 26%, #753CFF 57%, #201F22 100%);
-    --gradient-code: linear-gradient(157deg, #181719 14.93%, #131214 94.01%);
+    /* 自定义渐变 */
+    --gradient-primary: linear-gradient(135deg, #0A0A0B 0%, #141116 50%, #1A1A1E 100%);
+    --gradient-hero: radial-gradient(ellipse at center, rgba(123, 61, 255, 0.15) 0%, rgba(0, 255, 138, 0.05) 50%, transparent 100%);
+    --gradient-card: linear-gradient(145deg, rgba(20, 18, 21, 0.8) 0%, rgba(26, 26, 30, 0.4) 100%);
+    --gradient-border: linear-gradient(90deg, rgba(0, 255, 138, 0.3) 0%, rgba(123, 61, 255, 0.3) 50%, rgba(0, 255, 138, 0.1) 100%);
+    --gradient-code: linear-gradient(135deg, #0F0E11 0%, #1A1820 100%);
+    
+    /* 终端颜色 */
+    --terminal-bg: #0D1117;
+    --terminal-border: #30363D;
+    --terminal-text: #F0F6FC;
+    --terminal-success: #3FB950;
+    --terminal-command: #58A6FF;
   }
 
   .dark {
     --background: 220 13% 5%;
-    --foreground: 0 0% 100%;
+    --foreground: 0 0% 98%;
   }
 
   * {
@@ -43,10 +60,12 @@
   
   body {
     @apply bg-background text-foreground;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: var(--gradient-primary);
+    min-height: 100vh;
   }
 
-  /* Custom animations */
+  /* 自定义动画 */
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -58,83 +77,145 @@
     }
   }
 
-  @keyframes typewriter {
-    from { width: 0; }
-    to { width: 100%; }
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(0, 255, 138, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(0, 255, 138, 0.6), 0 0 40px rgba(0, 255, 138, 0.3);
+    }
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   .animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out forwards;
+    animation: fadeInUp 0.8s ease-out forwards;
   }
 
-  .typewriter {
-    animation: typewriter 2s steps(20) forwards;
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
   }
 }
 
 @layer components {
   .hero-gradient {
     background: var(--gradient-primary);
+    position: relative;
+  }
+
+  .hero-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-hero);
+    pointer-events: none;
+  }
+
+  .card-gradient {
+    background: var(--gradient-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .border-gradient {
     background: var(--gradient-border);
     padding: 1px;
-    border-radius: 12px;
+    border-radius: 16px;
   }
 
   .border-gradient-inner {
-    background: var(--gradient-primary);
-    border-radius: 12px;
+    background: var(--gradient-code);
+    border-radius: 15px;
     height: 100%;
   }
 
-  .code-gradient {
-    background: var(--gradient-code);
-  }
-
-  .noise-overlay {
-    position: relative;
-  }
-
-  .noise-overlay::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='0.1'/></svg>");
-    pointer-events: none;
-    z-index: 1;
-  }
-
   .terminal-window {
-    @apply bg-gray-900 rounded-lg overflow-hidden font-mono text-sm;
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   }
 
   .terminal-header {
-    @apply flex items-center justify-between p-3 bg-gray-800;
+    @apply flex items-center justify-between px-4 py-3;
+    background: linear-gradient(135deg, #1C1C1C 0%, #2D2D2D 100%);
+    border-bottom: 1px solid var(--terminal-border);
   }
 
   .terminal-dots {
-    @apply flex gap-1.5;
+    @apply flex gap-2;
   }
 
   .terminal-dot {
     @apply w-3 h-3 rounded-full;
   }
 
+  .terminal-dot:nth-child(1) { background: #FF5F57; }
+  .terminal-dot:nth-child(2) { background: #FFBD2E; }
+  .terminal-dot:nth-child(3) { background: #28CA42; }
+
   .terminal-content {
-    @apply p-4 space-y-2;
+    @apply p-6 space-y-4;
+    background: var(--terminal-bg);
+    color: var(--terminal-text);
   }
 
   .terminal-line {
-    @apply text-green-400;
+    color: var(--terminal-command);
+    font-weight: 500;
   }
 
   .terminal-success {
-    @apply text-primary flex items-center gap-2;
+    color: var(--terminal-success);
+    @apply flex items-center gap-3 text-sm;
   }
 
-  .glow-effect {
-    box-shadow: 0 0 20px rgba(72, 255, 187, 0.3);
+  .glow-button {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300;
+    box-shadow: 0 0 20px rgba(0, 255, 138, 0.4);
+  }
+
+  .glow-button:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 138, 0.6);
+    transform: translateY(-2px);
+  }
+
+  .glass-card {
+    background: rgba(20, 18, 21, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #00FF8A 0%, #7B3DFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .noise-texture {
+    position: relative;
+  }
+
+  .noise-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIi8+PC9zdmc+");
+    pointer-events: none;
+    z-index: 1;
   }
 }
